@@ -1,26 +1,35 @@
-﻿namespace SortingAlgorithms
+﻿using System;
+
+namespace SortingAlgorithms
 {
     public static class SimpleAlgorithms
     {
-        public static void BubbleSort(byte[] array, int leftIndex, int rightIndex)
+        public static void BubbleSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             for (int i = leftIndex; i <= rightIndex; i++)
                 for (int j = leftIndex; j <= rightIndex - i - 1; j++)
-                    if (array[j] > array[j + 1])
+                    if (array[j].CompareTo(array[j + 1]) > 0)
                         Util.Swap(array, j, j + 1);
         }
 
-        public static void InsertionSort(byte[] array, int leftIndex, int rightIndex)
+        public static void InsertionSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             for (int i = leftIndex + 1; i <= rightIndex; i++)
             {
-                for (int j = i; j > leftIndex; j--)
-                    if (array[j] < array[j - 1])
-                        Util.Swap(array, j, j - 1);
+                T current = array[i];
+                int j = i;
+
+                while (j > leftIndex && array[j - 1].CompareTo(current) > 0)
+                {
+                    array[j] = array[j - 1];
+                    j--;
+                }
+
+                array[j] = current;
             }
         }
 
-        public static void SelectionSort(byte[] array, int leftIndex, int rightIndex)
+        public static void SelectionSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             int j;
 
@@ -31,14 +40,14 @@
             }
         }
 
-        public static void CombSort(byte[] array, int leftIndex, int rightIndex)
+        public static void CombSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             int comb = (int)((rightIndex - leftIndex) / 1.3f);
 
             while (comb >= 1)
             {
                 for (int i = leftIndex; i + comb <= rightIndex; i++)
-                    if (array[i] > array[i + comb])
+                    if (array[i].CompareTo(array[i + comb]) > 0)
                         Util.Swap(array, i, i + comb);
 
                 comb--;

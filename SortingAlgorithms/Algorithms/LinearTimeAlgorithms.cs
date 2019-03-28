@@ -1,4 +1,6 @@
-﻿namespace SortingAlgorithms
+﻿using System;
+
+namespace SortingAlgorithms
 {
     public static class LinearTimeAlgorithms
     {

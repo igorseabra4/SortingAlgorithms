@@ -1,8 +1,10 @@
-﻿namespace SortingAlgorithms
+﻿using System;
+
+namespace SortingAlgorithms
 {
     public static class RecursiveAlgorithms
     {
-        public static void MergeSort(byte[] array, int leftIndex, int rightIndex)
+        public static void MergeSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             int middle = (leftIndex + rightIndex) / 2;
 
@@ -15,18 +17,18 @@
             Merge(array, leftIndex, middle, rightIndex);
         }
 
-        private static void Merge(byte[] array, int leftIndex, int middle, int rightIndex)
+        private static void Merge<T>(T[] array, int leftIndex, int middle, int rightIndex) where T : IComparable
         {
             int leftIterator = leftIndex;
             int rightIterator = middle + 1;
 
-            byte[] newList = new byte[array.Length];
+            T[] newList = new T[array.Length];
 
             for (int newIterator = leftIndex; newIterator <= rightIndex; newIterator++)
             {
                 if (leftIterator <= middle && rightIterator <= rightIndex)
                 {
-                    if (array[leftIterator] < array[rightIterator])
+                    if (array[leftIterator].CompareTo(array[rightIterator]) < 0)
                     {
                         newList[newIterator] = array[leftIterator];
                         leftIterator++;
@@ -42,7 +44,7 @@
                     newList[newIterator] = array[leftIterator];
                     leftIterator++;
                 }
-                else if (rightIterator <= rightIndex)
+                else
                 {
                     newList[newIterator] = array[rightIterator];
                     rightIterator++;
@@ -54,8 +56,8 @@
                 array[i] = newList[i];
             }
         }
-
-        public static void QuickSort(byte[] array, int leftIndex, int rightIndex)
+        
+        public static void QuickSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             if (rightIndex > leftIndex)
             {
@@ -63,7 +65,7 @@
 
                 for (int i = leftIndex; i < rightIndex; i++)
                 {
-                    if (array[i] < array[rightIndex]) // pivot = rightIndex
+                    if (array[i].CompareTo(array[rightIndex]) < 0) // pivot = rightIndex
                     {
                         Util.Swap(array, i, rightIterator);
                         rightIterator++;

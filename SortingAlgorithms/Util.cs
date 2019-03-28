@@ -1,22 +1,24 @@
-﻿namespace SortingAlgorithms
+﻿using System;
+
+namespace SortingAlgorithms
 {
     public static class Util
     {
-        public static void Swap(byte[] array, int index1, int index2)
+        public static void Swap<T>(T[] array, int index1, int index2)
         {
-            byte temp = array[index1];
+            T temp = array[index1];
             array[index1] = array[index2];
             array[index2] = temp;
         }
 
-        public static int FindSmallerIndex(byte[] array, int leftIndex, int rightIndex)
+        public static int FindSmallerIndex<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            int smaller = array[leftIndex];
+            T smaller = array[leftIndex];
             int smallerIndex = leftIndex;
 
             for (int i = leftIndex + 1; i <= rightIndex; i++)
             {
-                if (array[i] < smaller)
+                if (array[i].CompareTo(smaller) < 0)
                 {
                     smaller = array[i];
                     smallerIndex = i;
@@ -26,14 +28,14 @@
             return smallerIndex;
         }
 
-        public static int FindBiggerIndex(byte[] array, int leftIndex, int rightIndex)
+        public static int FindBiggerIndex<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            int bigger = array[leftIndex];
+            T bigger = array[leftIndex];
             int biggerIndex = leftIndex;
 
             for (int i = leftIndex + 1; i <= rightIndex; i++)
             {
-                if (array[i] > bigger)
+                if (array[i].CompareTo(bigger) > 0)
                 {
                     bigger = array[i];
                     biggerIndex = i;

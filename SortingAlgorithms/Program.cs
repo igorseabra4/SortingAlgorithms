@@ -16,35 +16,49 @@ namespace SortingAlgorithms
             Console.ReadKey();
         }
 
+        // Perform a test of multiple sorting algorithms on the same array of random bytes.
         static void DoTest(int arrayLength)
         {
             Random r = new Random();
             byte[] array = new byte[arrayLength];
             r.NextBytes(array);
 
-            Console.WriteLine(("Array with " + array.Length + " numbers:").PadRight(27));
-            PerformOperationAndWriteResult(LinearTimeAlgorithms.CountingSort, array);
-            PerformOperationAndWriteResult(RecursiveAlgorithms.QuickSort, array);
-            PerformOperationAndWriteResult(RecursiveAlgorithms.MergeSort, array);
-            //PerformOperationAndWriteResult(SimpleAlgorithms.CombSort, array);
-            PerformOperationAndWriteResult(SimpleAlgorithms.InsertionSort, array);
-            PerformOperationAndWriteResult(SimpleAlgorithms.SelectionSort, array);
-            PerformOperationAndWriteResult(OtherAlgorithms.RecursiveSelectionSort, array);
-            PerformOperationAndWriteResult(SimpleAlgorithms.BubbleSort, array);
-            PerformOperationAndWriteResult(OtherAlgorithms.OddEvenBubbleSort, array);
-            //PerformOperationAndWriteResult(OtherAlgorithms.RecursiveBubbleSort, array);
+            Console.WriteLine("Array with " + array.Length + " numbers:");
+
+            // Linear algorithms
+            Console.WriteLine(OperationResult(LinearTimeAlgorithms.CountingSort, array));
+
+            // Recursive algorithms
+            Console.WriteLine(OperationResult(RecursiveAlgorithms.QuickSort, array));
+            Console.WriteLine(OperationResult(RecursiveAlgorithms.MergeSort, array));
+
+            // Selection sorts
+            Console.WriteLine(OperationResult(SimpleAlgorithms.SelectionSort, array));
+            Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveSelectionSort, array));
+
+            // Insertion sorts
+            Console.WriteLine(OperationResult(SimpleAlgorithms.InsertionSort, array));
+            Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveInsertionSort, array));
+
+            // Bubble sorts
+            Console.WriteLine(OperationResult(SimpleAlgorithms.BubbleSort, array));
+            Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveBubbleSort, array));
+            Console.WriteLine(OperationResult(OtherAlgorithms.OddEvenBubbleSort, array));
+
+            // Other n squared algorithms
+            Console.WriteLine(OperationResult(SimpleAlgorithms.CombSort, array));
 
             Console.WriteLine();
         }
 
-        private delegate void OperationDelegate(byte[] array, int leftIndex, int rightIndex);
+        private delegate void OperationDelegate<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable;
 
-        static void PerformOperationAndWriteResult(OperationDelegate operationDelegate, byte[] array)
+        static string OperationResult<T>(OperationDelegate<T> operationDelegate, T[] array) where T : IComparable
         {
-            byte[] newArray = new byte[array.Length];
+            T[] newArray = new T[array.Length];
             for (int i = 0; i < array.Length; i++)
                 newArray[i] = array[i];
-            byte[] testArray = new byte[array.Length];
+            T[] testArray = new T[array.Length];
             for (int i = 0; i < array.Length; i++)
                 testArray[i] = array[i];
 
@@ -54,18 +68,16 @@ namespace SortingAlgorithms
             stopWatch.Stop();
 
             Array.Sort(testArray);
-
-            Console.Write(("Algorithm: " + operationDelegate.Method.Name + ", Time: " + stopWatch.ElapsedMilliseconds.ToString() + " ms, Assert: " + AssertAreEqual(testArray, newArray)).PadRight(27));
-            Console.WriteLine();
+            return "Algorithm: " + operationDelegate.Method.Name + ", Time: " + stopWatch.ElapsedMilliseconds.ToString() + " ms, Assert: " + AssertAreEqual(testArray, newArray);
         }
 
-        static bool AssertAreEqual(byte[] array1, byte[] array2)
+        static bool AssertAreEqual<T>(T[] array1, T[] array2) where T : IComparable
         {
             if (array1.Length != array2.Length)
                 return false;
 
             for (int i = 0; i < array1.Length; i++)
-                if (array1[i] != array2[i])
+                if (array1[i].CompareTo(array2[i]) != 0)
                     return false;
 
             return true;

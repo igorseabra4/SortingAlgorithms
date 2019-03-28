@@ -1,26 +1,51 @@
-﻿namespace SortingAlgorithms
+﻿using System;
+
+namespace SortingAlgorithms
 {
     public static class OtherAlgorithms
     {
-        public static void RecursiveBubbleSort(byte[] array, int leftIndex, int rightIndex)
+        public static void RecursiveBubbleSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            for (int i = leftIndex; i <= rightIndex - 1; i++)
-                if (array[i] > array[i + 1])
-                    Util.Swap(array, i, i + 1);
+            if (leftIndex < rightIndex)
+            {
+                for (int i = leftIndex; i <= rightIndex - 1; i++)
+                    if (array[i].CompareTo(array[i + 1]) > 0)
+                        Util.Swap(array, i, i + 1);
 
-            if (rightIndex - 1 > leftIndex)
                 RecursiveBubbleSort(array, leftIndex, rightIndex - 1);
+            }
         }
 
-        public static void RecursiveSelectionSort(byte[] array, int leftIndex, int rightIndex)
+        public static void RecursiveInsertionSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            Util.Swap(array, leftIndex, Util.FindSmallerIndex(array, leftIndex, rightIndex));
+            if (leftIndex < rightIndex)
+            {
+                RecursiveInsertionSort(array, leftIndex, rightIndex - 1);
 
-            if (leftIndex + 1 < rightIndex)
-                RecursiveSelectionSort(array, leftIndex + 1, rightIndex);
+                T current = array[rightIndex];
+                int j = rightIndex;
+
+                while (j > leftIndex && array[j - 1].CompareTo(current) > 0)
+                {
+                    array[j] = array[j - 1];
+                    j--;
+                }
+
+                array[j] = current;
+            }
         }
 
-        public static void OddEvenBubbleSort(byte[] array, int leftIndex, int rightIndex)
+        public static void RecursiveSelectionSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
+        {
+            if (leftIndex < rightIndex)
+            {
+                Util.Swap(array, leftIndex, Util.FindSmallerIndex(array, leftIndex, rightIndex));
+
+                RecursiveSelectionSort(array, leftIndex + 1, rightIndex);
+            }
+        }
+
+        public static void OddEvenBubbleSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
             bool sorted;
 
@@ -29,14 +54,14 @@
                 sorted = true;
 
                 for (int j = leftIndex; j <= rightIndex - 1; j += 2)
-                    if (array[j] > array[j + 1])
+                    if (array[j].CompareTo(array[j + 1]) > 0)
                     {
                         sorted = false;
                         Util.Swap(array, j, j + 1);
                     }
 
                 for (int j = leftIndex + 1; j <= rightIndex - 1; j += 2)
-                    if (array[j] > array[j + 1])
+                    if (array[j].CompareTo(array[j + 1]) > 0)
                     {
                         sorted = false;
                         Util.Swap(array, j, j + 1);
