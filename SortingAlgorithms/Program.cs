@@ -5,61 +5,77 @@ namespace SortingAlgorithms
 {
     class Program
     {
+        /* Coisas que aprendi com esse programa:
+         * - Os algoritmos n^2 nao servem pra nada
+         * - As versoes recursivas deles conseguem ser piores que eles
+         * - Radix sort comeca a ser melhor que counting sort quando a amplitude dos valores do array aumenta
+         * */
         static void Main(string[] args)
         {
-            DoTest(10);
-            DoTest(50);
-            DoTest(100);
-            DoTest(1000);
-            DoTest(10000);
-            DoTest(100000);
-            DoTest(1000000);
+            int maxValue = 10000000;
+            Console.WriteLine("Maximum value in array (amplitude de valores): " + maxValue);
+            Console.WriteLine(); // we're not working with negative values since radix sort (and the mini counting sort) doesn't like that, but the rest can do it
+
+            DoTest(10, maxValue);
+            DoTest(50, maxValue);
+            DoTest(100, maxValue);
+            DoTest(500, maxValue);
+            DoTest(1000, maxValue);
+            DoTest(10000, maxValue);
+            DoTest(100000, maxValue);
+            //DoTest(1000000, maxValue);
+            //DoTest(10000000, maxValue);
+            //DoTest(100000000, maxValue);
             Console.ReadKey();
         }
 
-        // Perform a test of multiple sorting algorithms on the same array of random bytes.
-        static void DoTest(int arrayLength)
+        // Perform a test of multiple sorting algorithms on the same array of random integers, array length and maximum value of array value are parameters
+        static void DoTest(int arrayLength, int maxValue)
         {
-            Random r = new Random();
-            byte[] array = new byte[arrayLength];
-            r.NextBytes(array);
+            Random r = new Random((int)DateTime.Now.ToBinary());
+            int[] array = new int[arrayLength];
+            for (int i = 0; i < arrayLength; i++)
+                array[i] = r.Next(0, maxValue + 1);
 
             Console.WriteLine("Array with " + array.Length + " numbers:");
 
-            // Linear algorithms
+            //Linear algorithms - they only work on integer arrays! bucket sort is supposed to work on float arrays too
             Console.WriteLine(OperationResult(LinearTimeAlgorithms.CountingSort, array));
             Console.WriteLine(OperationResult(LinearTimeAlgorithms.RadixSort, array));
-            Console.WriteLine(OperationResult(LinearTimeAlgorithms.BucketSort, array));
+            //Console.WriteLine(OperationResult(LinearTimeAlgorithms.BucketSort, array)); // no bucket sort implemented yet
 
-            // Recursive algorithms
-            Console.WriteLine(OperationResult(RecursiveAlgorithms.QuickSort, array));
-            Console.WriteLine(OperationResult(RecursiveAlgorithms.MergeSort, array));
+            ////Recursive algorithms
+            //Console.WriteLine(OperationResult(RecursiveAlgorithms.QuickSort, array));
+            //Console.WriteLine(OperationResult(RecursiveAlgorithms.MergeSort, array));
 
-            // Selection sorts
-            Console.WriteLine(OperationResult(SimpleAlgorithms.SelectionSort, array));
-            if (arrayLength < 10000)
-                Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveSelectionSort, array));
-            Console.WriteLine(OperationResult(SimpleAlgorithms.SimultaneousSelectionSort, array));
+            //// Selection sorts
+            //Console.WriteLine(OperationResult(SimpleAlgorithms.SelectionSort, array));
+            //if (arrayLength < 10000)
+            //    Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveSelectionSort, array));
+            //Console.WriteLine(OperationResult(SimpleAlgorithms.SimultaneousSelectionSort, array));
 
-            // Insertion sorts
-            Console.WriteLine(OperationResult(SimpleAlgorithms.InsertionSort, array));
-            if (arrayLength < 10000)
-                Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveInsertionSort, array));
+            //// Insertion sorts
+            //Console.WriteLine(OperationResult(SimpleAlgorithms.InsertionSort, array));
+            //if (arrayLength < 10000)
+            //    Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveInsertionSort, array));
 
-            // Bubble sorts
-            Console.WriteLine(OperationResult(SimpleAlgorithms.BubbleSort, array));
-            if (arrayLength < 10000)
-                Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveBubbleSort, array));
-            Console.WriteLine(OperationResult(OtherAlgorithms.OddEvenBubbleSort, array));
+            //// Bubble sorts
+            //Console.WriteLine(OperationResult(SimpleAlgorithms.BubbleSort, array));
+            //if (arrayLength < 10000)
+            //    Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveBubbleSort, array));
+            //Console.WriteLine(OperationResult(OtherAlgorithms.OddEvenBubbleSort, array));
 
-            // Other n squared algorithms
-            Console.WriteLine(OperationResult(SimpleAlgorithms.CombSort, array));
+            //// Other n squared algorithms
+            //Console.WriteLine(OperationResult(SimpleAlgorithms.CombSort, array));
 
             Console.WriteLine();
         }
 
+        // yay functional programming, i can pass each sorting function as a parameter to OperationResult
         private delegate void OperationDelegate<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable;
 
+        // this function runs the sorting function, measuring its time and returning a string which says the method name,
+        // the time it took in milliseconds and the result of the assertion
         static string OperationResult<T>(OperationDelegate<T> operationDelegate, T[] array) where T : IComparable
         {
             T[] newArray = new T[array.Length];
@@ -93,6 +109,12 @@ namespace SortingAlgorithms
         public static void WriteArray(byte[] array)
         {
             foreach (byte i in array)
+                Console.Write(i.ToString() + " ");
+        }
+
+        public static void WriteArray(int[] array)
+        {
+            foreach (int i in array)
                 Console.Write(i.ToString() + " ");
         }
     }

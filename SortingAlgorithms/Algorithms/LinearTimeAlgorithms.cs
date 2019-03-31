@@ -4,7 +4,33 @@ namespace SortingAlgorithms
 {
     public static class LinearTimeAlgorithms
     {
-        public static void CountingSort(byte[] array, int leftIndex, int rightIndex)
+        public static void MiniCountingSort(byte[] array, int leftIndex, int rightIndex)
+        {
+            if (array != null && leftIndex >= 0 && rightIndex < array.Length)
+            {
+                int bigger = array[Util.FindBiggerIndex(array, leftIndex, rightIndex)];
+                int[] counters = new int[bigger + 1];
+
+                for (int i = leftIndex; i <= rightIndex; i++)
+                    counters[array[i]]++;
+
+                for (int i = 1; i < counters.Length; i++)
+                    counters[i] += counters[i - 1];
+
+                byte[] newArray = new byte[array.Length];
+
+                for (int i = rightIndex; i >= leftIndex; i--)
+                {
+                    newArray[counters[array[i]] - 1] = array[i];
+                    counters[array[i]]--;
+                }
+
+                for (int i = leftIndex; i <= rightIndex; i++)
+                    array[i] = newArray[i];
+            }
+        }
+
+        public static void CountingSort(int[] array, int leftIndex, int rightIndex)
         {
             if (array != null && leftIndex >= 0 && rightIndex < array.Length)
             {
@@ -18,7 +44,7 @@ namespace SortingAlgorithms
                 for (int i = 1; i < counters.Length; i++)
                     counters[i] += counters[i - 1];
 
-                byte[] newArray = new byte[array.Length];
+                int[] newArray = new int[array.Length];
 
                 for (int i = rightIndex; i >= leftIndex; i--)
                 {
@@ -31,19 +57,20 @@ namespace SortingAlgorithms
             }
         }
 
-        public static void RadixSort(byte[] array, int leftIndex, int rightIndex)
+        // note: this implementation of radix sort only works with arrays containing only positive values!
+        public static void RadixSort(int[] array, int leftIndex, int rightIndex)
         {
             if (array != null && leftIndex >= 0 && rightIndex < array.Length)
             {
                 int maximum = array[Util.FindBiggerIndex(array, leftIndex, rightIndex)];
-                int expBase = 10;
+                int expBase = 256;
 
                 for (int exponent = 1; maximum / exponent > 0; exponent *= expBase)
                     CountingSortByExponent(array, leftIndex, rightIndex, exponent, expBase);
             }
         }
 
-        public static void CountingSortByExponent(byte[] array, int leftIndex, int rightIndex, int exponent, int expBase)
+        public static void CountingSortByExponent(int[] array, int leftIndex, int rightIndex, int exponent, int expBase)
         {
             int[] counters = new int[expBase];
 
@@ -53,7 +80,7 @@ namespace SortingAlgorithms
             for (int i = 1; i < counters.Length; i++)
                 counters[i] += counters[i - 1];
 
-            byte[] newArray = new byte[array.Length];
+            int[] newArray = new int[array.Length];
 
             // right to left is what keeps it stable
             for (int i = rightIndex; i >= leftIndex; i--)

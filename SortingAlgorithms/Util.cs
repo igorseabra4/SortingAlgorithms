@@ -13,34 +13,22 @@ namespace SortingAlgorithms
 
         public static int FindSmallerIndex<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            T smaller = array[leftIndex];
             int smallerIndex = leftIndex;
 
             for (int i = leftIndex + 1; i <= rightIndex; i++)
-            {
-                if (array[i].CompareTo(smaller) < 0)
-                {
-                    smaller = array[i];
+                if (array[i].CompareTo(array[smallerIndex]) < 0)
                     smallerIndex = i;
-                }
-            }
 
             return smallerIndex;
         }
 
         public static int FindBiggerIndex<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            T bigger = array[leftIndex];
             int biggerIndex = leftIndex;
 
             for (int i = leftIndex + 1; i <= rightIndex; i++)
-            {
-                if (array[i].CompareTo(bigger) > 0)
-                {
-                    bigger = array[i];
+                if (array[i].CompareTo(array[biggerIndex]) > 0)
                     biggerIndex = i;
-                }
-            }
 
             return biggerIndex;
         }
