@@ -8,6 +8,7 @@ namespace SortingAlgorithms
         static void Main(string[] args)
         {
             DoTest(10);
+            DoTest(50);
             DoTest(100);
             DoTest(1000);
             DoTest(10000);
@@ -27,6 +28,8 @@ namespace SortingAlgorithms
 
             // Linear algorithms
             Console.WriteLine(OperationResult(LinearTimeAlgorithms.CountingSort, array));
+            Console.WriteLine(OperationResult(LinearTimeAlgorithms.RadixSort, array));
+            Console.WriteLine(OperationResult(LinearTimeAlgorithms.BucketSort, array));
 
             // Recursive algorithms
             Console.WriteLine(OperationResult(RecursiveAlgorithms.QuickSort, array));
@@ -34,15 +37,19 @@ namespace SortingAlgorithms
 
             // Selection sorts
             Console.WriteLine(OperationResult(SimpleAlgorithms.SelectionSort, array));
-            Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveSelectionSort, array));
+            if (arrayLength < 10000)
+                Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveSelectionSort, array));
+            Console.WriteLine(OperationResult(SimpleAlgorithms.SimultaneousSelectionSort, array));
 
             // Insertion sorts
             Console.WriteLine(OperationResult(SimpleAlgorithms.InsertionSort, array));
-            Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveInsertionSort, array));
+            if (arrayLength < 10000)
+                Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveInsertionSort, array));
 
             // Bubble sorts
             Console.WriteLine(OperationResult(SimpleAlgorithms.BubbleSort, array));
-            Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveBubbleSort, array));
+            if (arrayLength < 10000)
+                Console.WriteLine(OperationResult(OtherAlgorithms.RecursiveBubbleSort, array));
             Console.WriteLine(OperationResult(OtherAlgorithms.OddEvenBubbleSort, array));
 
             // Other n squared algorithms
@@ -83,7 +90,7 @@ namespace SortingAlgorithms
             return true;
         }
 
-        static void WriteArray(byte[] array)
+        public static void WriteArray(byte[] array)
         {
             foreach (byte i in array)
                 Console.Write(i.ToString() + " ");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace SortingAlgorithms
 {
@@ -6,7 +7,7 @@ namespace SortingAlgorithms
     {
         public static void RecursiveBubbleSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            if (leftIndex < rightIndex)
+            if (leftIndex < rightIndex && array != null && leftIndex >= 0 && rightIndex < array.Length)
             {
                 for (int i = leftIndex; i <= rightIndex - 1; i++)
                     if (array[i].CompareTo(array[i + 1]) > 0)
@@ -18,7 +19,7 @@ namespace SortingAlgorithms
 
         public static void RecursiveInsertionSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            if (leftIndex < rightIndex)
+            if (leftIndex < rightIndex && array != null && leftIndex >= 0 && rightIndex < array.Length)
             {
                 RecursiveInsertionSort(array, leftIndex, rightIndex - 1);
 
@@ -37,7 +38,7 @@ namespace SortingAlgorithms
 
         public static void RecursiveSelectionSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            if (leftIndex < rightIndex)
+            if (leftIndex < rightIndex && array != null && leftIndex >= 0 && rightIndex < array.Length)
             {
                 Util.Swap(array, leftIndex, Util.FindSmallerIndex(array, leftIndex, rightIndex));
 
@@ -47,27 +48,30 @@ namespace SortingAlgorithms
 
         public static void OddEvenBubbleSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            bool sorted;
-
-            do
+            if (array != null && leftIndex >= 0 && rightIndex < array.Length)
             {
-                sorted = true;
+                bool sorted;
 
-                for (int j = leftIndex; j <= rightIndex - 1; j += 2)
-                    if (array[j].CompareTo(array[j + 1]) > 0)
-                    {
-                        sorted = false;
-                        Util.Swap(array, j, j + 1);
-                    }
+                do
+                {
+                    sorted = true;
 
-                for (int j = leftIndex + 1; j <= rightIndex - 1; j += 2)
-                    if (array[j].CompareTo(array[j + 1]) > 0)
-                    {
-                        sorted = false;
-                        Util.Swap(array, j, j + 1);
-                    }
+                    for (int j = leftIndex; j <= rightIndex - 1; j += 2)
+                        if (array[j].CompareTo(array[j + 1]) > 0)
+                        {
+                            sorted = false;
+                            Util.Swap(array, j, j + 1);
+                        }
+
+                    for (int j = leftIndex + 1; j <= rightIndex - 1; j += 2)
+                        if (array[j].CompareTo(array[j + 1]) > 0)
+                        {
+                            sorted = false;
+                            Util.Swap(array, j, j + 1);
+                        }
+                }
+                while (!sorted);
             }
-            while (!sorted);
         }
     }
 }

@@ -6,15 +6,18 @@ namespace SortingAlgorithms
     {
         public static void MergeSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            int middle = (leftIndex + rightIndex) / 2;
-
-            if (leftIndex < rightIndex)
+            if (leftIndex >= 0 && rightIndex < array.Length)
             {
-                MergeSort(array, leftIndex, middle);
-                MergeSort(array, middle + 1, rightIndex);
-            }
+                int middle = (leftIndex + rightIndex) / 2;
 
-            Merge(array, leftIndex, middle, rightIndex);
+                if (leftIndex < rightIndex)
+                {
+                    MergeSort(array, leftIndex, middle);
+                    MergeSort(array, middle + 1, rightIndex);
+                }
+
+                Merge(array, leftIndex, middle, rightIndex);
+            }
         }
 
         private static void Merge<T>(T[] array, int leftIndex, int middle, int rightIndex) where T : IComparable
@@ -59,9 +62,12 @@ namespace SortingAlgorithms
         
         public static void QuickSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            if (rightIndex > leftIndex)
+            if (rightIndex > leftIndex && leftIndex >= 0 && rightIndex < array.Length)
             {
                 int rightIterator = leftIndex;
+
+                int pivot = new Random().Next(leftIndex, rightIndex + 1); // random pivot
+                Util.Swap(array, pivot, rightIndex); // which is placed at rightIndex
 
                 for (int i = leftIndex; i < rightIndex; i++)
                 {
