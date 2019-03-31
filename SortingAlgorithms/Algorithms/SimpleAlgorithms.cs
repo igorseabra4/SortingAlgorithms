@@ -57,8 +57,9 @@ namespace SortingAlgorithms
 
                 for (int i = 0; i < iterations; i++)
                 {
-                    Util.Swap(array, leftIndex + i, Util.FindSmallerIndex(array, leftIndex + i, rightIndex - i));
-                    Util.Swap(array, rightIndex - i, Util.FindBiggerIndex(array, leftIndex + i, rightIndex - i));
+                    (int, int) smallerAndBigger = Util.FindSmallerAndBiggerIndices(array, leftIndex + i, rightIndex - i);
+                    Util.Swap(array, leftIndex + i, smallerAndBigger.Item1);
+                    Util.Swap(array, rightIndex - i, smallerAndBigger.Item2);
                 }
             }
         }
