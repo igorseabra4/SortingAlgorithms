@@ -84,5 +84,38 @@ namespace SortingAlgorithms
                 QuickSort(array, rightIterator + 1, rightIndex);
             }
         }
+        
+        public static void ThreeWayQuickSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
+        {
+            if (rightIndex > leftIndex && leftIndex >= 0 && rightIndex < array.length)
+            {
+                int equal = 0;
+                for (int i = leftIndex; i < rightIndex - equal; i++)
+                {
+                    if (array[i] == array[rightIndex])
+                    {
+                        Util.Swap(array, i, rightIndex - equal - 1);
+                        equal++;
+                    }
+                }
+                
+                int rightIterator = leftIndex;
+
+                for (int i = leftIndex; i < rightIndex; i++)
+                {
+                    if (array[i].CompareTo(array[rightIndex]) < 0) // pivot = rightIndex
+                    {
+                        Util.Swap(array, i, rightIterator);
+                        rightIterator++;
+                    }
+                }
+
+                for (int i = 0; i <= equal; i++)
+                    Util.Swap(array, rightIterator + i, rightIndex - i);
+                
+                ThreeWayQuickSort(array, leftIndex, rightIterator - 1);
+                ThreeWayQuickSort(array, rightIterator + equal + 1, rightIndex);
+            }
+        }
     }
 }
