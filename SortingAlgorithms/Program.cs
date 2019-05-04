@@ -5,12 +5,29 @@ namespace SortingAlgorithms
 {
     class Program
     {
+        static void Main(string[] args)
+        {
+            BinaryTree<int> binaryTree = new BinaryTree<int>();
+
+            while (true)
+            {
+                string entry = Console.ReadLine();
+
+                if (entry.StartsWith("a"))
+                    binaryTree.Add(int.Parse(entry.Split(' ')[1]));
+                else if (entry.StartsWith("r"))
+                    binaryTree.Remove(int.Parse(entry.Split(' ')[1]));
+
+                Console.WriteLine(binaryTree.ToString());
+            }
+        }
+
         /* Coisas que aprendi com esse programa:
          * - Os algoritmos n^2 nao servem pra nada
          * - As versoes recursivas deles conseguem ser piores que eles
          * - Radix sort comeca a ser melhor que counting sort quando a amplitude dos valores do array aumenta
          * */
-        static void Main(string[] args)
+        static void Main2(string[] args)
         {
             int maxValue = 10000000;
             Console.WriteLine("Maximum value in array (amplitude de valores): " + maxValue);
