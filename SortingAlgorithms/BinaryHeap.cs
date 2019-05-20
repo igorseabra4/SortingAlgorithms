@@ -13,7 +13,7 @@ namespace SortingAlgorithms
 
         public BinaryHeap()
         {
-            elements = new int[8]; //a
+            elements = new int[8];
             size = 0;
         }
         public BinaryHeap(int[] elements)
