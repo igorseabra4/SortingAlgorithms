@@ -6,6 +6,7 @@ namespace SortingAlgorithms
     {
         private bool isNIL;
         private T data;
+        private BinaryTree<T> parent;
         private BinaryTree<T> leftNode;
         private BinaryTree<T> rightNode;
 
@@ -20,20 +21,24 @@ namespace SortingAlgorithms
         private void SetData(T data)
         {
             this.data = data;
-            leftNode = new BinaryTree<T>();
-            rightNode = new BinaryTree<T>();
+            leftNode = new BinaryTree<T>(this);
+            rightNode = new BinaryTree<T>(this);
             isNIL = false;
         }
 
-        public BinaryTree()
+        public BinaryTree(BinaryTree<T> parent)
         {
+            this.parent = parent;
             SetAsNIL();
         }
 
-        public BinaryTree(T data)
+        public BinaryTree(BinaryTree<T> parent, T data)
         {
+            this.parent = parent;
             SetData(data);
         }
+
+        public T Data => data;
 
         public void Add(T data)
         {
@@ -68,7 +73,6 @@ namespace SortingAlgorithms
             return returnValue;
         }
 
-        // all wrong
         public void Remove(T data)
         {
             if (data != null && !isNIL)
@@ -79,21 +83,21 @@ namespace SortingAlgorithms
                     {
                         SetAsNIL();
                     }
-                    else if (leftNode.isNIL && !rightNode.isNIL)
-                    {
-                        this.data = rightNode.data;
-                        leftNode = rightNode.leftNode;
-                        rightNode = rightNode.rightNode;
-                    }
+                    // Caso onde so tem o leftNode e o rightNode e NIL
+                    // Tambem poderia ser o contrario aqui e no else trocar pelo predecessor
                     else if (!leftNode.isNIL && rightNode.isNIL)
                     {
-                        this.data = leftNode.data;
-                        rightNode = leftNode.rightNode;
-                        leftNode = leftNode.leftNode;
+                        if (parent.leftNode == this)
+                            parent.leftNode = leftNode;
+                        else
+                            parent.rightNode = leftNode;
+
+                        leftNode.parent = parent;
                     }
-                    else if (!leftNode.isNIL && !rightNode.isNIL)
+                    else
                     {
-                        Console.WriteLine("Error: unimplemented remove case");
+                        this.data = Successor();
+                        rightNode.Remove(this.data);
                     }
                 }
                 else if (data.CompareTo(this.data) < 0)
@@ -101,6 +105,102 @@ namespace SortingAlgorithms
                 else
                     rightNode.Remove(data);
             }
+        }
+
+        public T LowerBound()
+        {
+            T returnValue = default(T);
+
+            if (!isNIL)
+            {
+                if (leftNode.isNIL)
+                    returnValue = data;
+                else
+                    returnValue = leftNode.LowerBound();
+            }
+
+            return returnValue;
+        }
+
+        public T UpperBound()
+        {
+            T returnValue = default(T);
+
+            if (!isNIL)
+            {
+                if (rightNode.isNIL)
+                    returnValue = data;
+                else
+                    returnValue = rightNode.UpperBound();
+            }
+
+            return returnValue;
+        }
+
+        public T Predecessor()
+        {
+            T returnValue = default(T);
+
+            if (!isNIL)
+            {
+                if (!leftNode.isNIL)
+                    returnValue = leftNode.UpperBound();
+                else
+                {
+                    BinaryTree<T> parent = this.parent;
+                    BinaryTree<T> node = this;
+
+                    while (parent != null && node == parent.leftNode)
+                    {
+                        node = parent;
+                        parent = parent.parent;
+                    }
+
+                    if (parent != null)
+                        returnValue = parent.data;
+                    // else, nao tem predecessor
+                }
+            }
+            
+            return returnValue;
+        }
+
+        public T Successor()
+        {
+            T returnValue = default(T);
+
+            if (!isNIL)
+            {
+                if (!rightNode.isNIL)
+                    returnValue = rightNode.LowerBound();
+                else
+                {
+                    BinaryTree<T> parent = this.parent;
+                    BinaryTree<T> node = this;
+
+                    while (parent != null && node == parent.rightNode)
+                    {
+                        node = parent;
+                        parent = parent.parent;
+                    }
+
+                    if (parent != null)
+                        returnValue = parent.data;
+                    // else, nao tem sucessor
+                }
+            }
+
+            return returnValue;
+        }
+
+        public int Height()
+        {
+            int returnValue = 0;
+
+            if (!isNIL)
+                returnValue = 1 + Math.Max(leftNode.Height(), rightNode.Height());
+            
+            return returnValue;
         }
 
         public override string ToString()

@@ -7,7 +7,7 @@ namespace SortingAlgorithms
     {
         static void Main(string[] args)
         {
-            BinaryTree<int> binaryTree = new BinaryTree<int>();
+            BinaryTree<int> binaryTree = new BinaryTree<int>(null);
 
             while (true)
             {
@@ -17,6 +17,18 @@ namespace SortingAlgorithms
                     binaryTree.Add(int.Parse(entry.Split(' ')[1]));
                 else if (entry.StartsWith("r"))
                     binaryTree.Remove(int.Parse(entry.Split(' ')[1]));
+                else if (entry.StartsWith("f"))
+                    Console.WriteLine(binaryTree.Find(int.Parse(entry.Split(' ')[1])).ToString());
+                else if (entry.StartsWith("ub"))
+                    Console.WriteLine(binaryTree.UpperBound().ToString());
+                else if (entry.StartsWith("lb"))
+                    Console.WriteLine(binaryTree.LowerBound().ToString());
+                else if (entry.StartsWith("su"))
+                    Console.WriteLine(binaryTree.Successor().ToString());
+                else if (entry.StartsWith("pr"))
+                    Console.WriteLine(binaryTree.Predecessor().ToString());
+                else if (entry.StartsWith("m"))
+                    Console.WriteLine(binaryTree.Data.ToString());
 
                 Console.WriteLine(binaryTree.ToString());
             }

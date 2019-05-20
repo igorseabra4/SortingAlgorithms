@@ -87,12 +87,12 @@ namespace SortingAlgorithms
         
         public static void ThreeWayQuickSort<T>(T[] array, int leftIndex, int rightIndex) where T : IComparable
         {
-            if (rightIndex > leftIndex && leftIndex >= 0 && rightIndex < array.length)
+            if (rightIndex > leftIndex && leftIndex >= 0 && rightIndex < array.Length)
             {
                 int equal = 0;
                 for (int i = leftIndex; i < rightIndex - equal; i++)
                 {
-                    if (array[i] == array[rightIndex])
+                    if (array[i].Equals(array[rightIndex]))
                     {
                         Util.Swap(array, i, rightIndex - equal - 1);
                         equal++;
